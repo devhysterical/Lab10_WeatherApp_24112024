@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -46,18 +47,27 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<WeatherResponse> {
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        val temp = it.main.temp
-                        val description = it.weather[0].description.capitalize(Locale.ROOT)
-                        val iconUrl = "https://openweathermap.org/img/wn/${it.weather[0].icon}@2x.png"
+                    response.body()?.let { weatherResponse ->
+                        val temp = weatherResponse.main.temp
+                        val description = weatherResponse.weather[0].description.capitalize(Locale.ROOT)
+                        val windSpeed = weatherResponse.wind.speed
+                        val humidity = weatherResponse.main.humidity
+                        val iconUrl = "https://openweathermap.org/img/wn/${weatherResponse.weather[0].icon}@4x.png"
 
-                        tvWeatherResult.text = "Nhiệt độ: $temp°C\nMiêu tả: $description"
+                        // Format Unix timestamp thành ngày
+                        val sdf = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
+                        val date = Date(weatherResponse.dt * 1000)
+                        val formattedDate = sdf.format(date)
+
+                        tvWeatherResult.text = "Ngày: $formattedDate\nNhiệt độ: $temp°C\nMiêu tả: $description\nGió: $windSpeed km/h\nĐộ ẩm: $humidity%"
+
+                        // Hiển thị icon thời tiết
                         Glide.with(this@MainActivity)
                             .load(iconUrl)
+                            .override(600, 600)
                             .into(ivWeatherIcon)
                     }
-                }
-                else {
+                } else {
                     tvWeatherResult.text = "Không tìm thấy thành phố"
                 }
             }

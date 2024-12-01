@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Lớp nền gradient -->
+    <item>
+        <shape>
+            <gradient
+                android:startColor="#004aad"
+                android:centerColor="#47bfdf"
+                android:endColor="#ffffff"
+                android:angle="270" />
+        </shape>
+    </item>
+
+    <!-- Lớp viền bo tròn -->
+    <item>
+        <shape>
+            <stroke
+                android:width="4dp"
+                android:color="#A8DADC" />
+            <corners
+                android:radius="30dp" />
+        </shape>
+    </item>
+</layer-list>
